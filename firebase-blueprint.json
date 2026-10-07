@@ -1,0 +1,298 @@
+{
+  "entities": {
+    "Farm": {
+      "title": "Farm",
+      "description": "Represents an agricultural farm owned by a user",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "name": { "type": "string", "maxLength": 100, "description": "Name of the farm" },
+        "location": { "type": "string", "maxLength": 150, "description": "Geographical location" },
+        "size": { "type": "number", "description": "Size of the farm in acres" },
+        "crop": { "type": "string", "maxLength": 50, "description": "Primary crop cultivated" },
+        "health": { "type": "number", "description": "Calculated crop health percentage (0-100)" },
+        "status": { "type": "string", "maxLength": 30, "description": "Current status" },
+        "fields": { "type": "number", "description": "Number of sub-field plots" },
+        "mapStatus": { "type": "string", "maxLength": 30, "description": "Status of mapping" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "name", "location", "size", "crop"]
+    },
+    "FarmMapping": {
+      "title": "FarmMapping",
+      "description": "Spatial mapping and sector boundary record for a farm",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "farmId": { "type": "string", "maxLength": 100, "description": "Associated farm identifier" },
+        "farmName": { "type": "string", "maxLength": 100, "description": "Name of the farm" },
+        "area": { "type": "number", "description": "Mapped area size" },
+        "areaUnit": { "type": "string", "maxLength": 20, "description": "Acres or Kanal" },
+        "fields": { "type": "number", "description": "Number of mapped zones" },
+        "status": { "type": "string", "maxLength": 30, "description": "Mapping status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "farmName", "status"]
+    },
+    "CropMonitoring": {
+      "title": "CropMonitoring",
+      "description": "Vegetation index, health, and sensor readings for a field",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "farmId": { "type": "string", "maxLength": 100, "description": "Farm identifier" },
+        "farmName": { "type": "string", "maxLength": 100, "description": "Name of the farm" },
+        "crop": { "type": "string", "maxLength": 50, "description": "Crop monitored" },
+        "monitoringDate": { "type": "string", "maxLength": 30, "description": "Date of inspection" },
+        "health": { "type": "number", "description": "Health index percentage" },
+        "status": { "type": "string", "maxLength": 30, "description": "Analysis status" },
+        "scanType": { "type": "string", "maxLength": 50, "description": "Type of scan performed" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "farmName", "crop", "health"]
+    },
+    "DiseaseDetection": {
+      "title": "DiseaseDetection",
+      "description": "AI-detected plant pathologies and stress indicators",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "farmName": { "type": "string", "maxLength": 100, "description": "Name of the farm" },
+        "crop": { "type": "string", "maxLength": 50, "description": "Crop examined" },
+        "disease": { "type": "string", "maxLength": 100, "description": "Identified disease name" },
+        "confidence": { "type": "number", "description": "AI model confidence (0-100)" },
+        "severity": { "type": "string", "maxLength": 30, "description": "Severity level" },
+        "areaAffected": { "type": "string", "maxLength": 30, "description": "Percentage or area affected" },
+        "imageURL": { "type": "string", "maxLength": 1000, "description": "Image download or reference URL" },
+        "imageName": { "type": "string", "maxLength": 200, "description": "Original file name" },
+        "status": { "type": "string", "maxLength": 30, "description": "Detection state" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "disease", "confidence", "status"]
+    },
+    "DroneMission": {
+      "title": "DroneMission",
+      "description": "Autonomous flight plan and telemetry tracking for drones",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "missionName": { "type": "string", "maxLength": 120, "description": "Title of the flight mission" },
+        "missionType": { "type": "string", "maxLength": 60, "description": "Category of mission" },
+        "farm": { "type": "string", "maxLength": 100, "description": "Target farm" },
+        "crop": { "type": "string", "maxLength": 50, "description": "Crop overflown" },
+        "area": { "type": "number", "description": "Area in acres or hectares" },
+        "areaUnit": { "type": "string", "maxLength": 20, "description": "Unit of measurement" },
+        "altitude": { "type": "number", "description": "Flight altitude in meters" },
+        "speed": { "type": "number", "description": "Flight velocity in m/s" },
+        "battery": { "type": "number", "description": "Current battery percentage" },
+        "status": { "type": "string", "maxLength": 30, "description": "Active, Pending, Completed, or Cancelled" },
+        "date": { "type": "string", "maxLength": 30, "description": "Mission date" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "missionName", "missionType", "farm", "status"]
+    },
+    "SprayingMission": {
+      "title": "SprayingMission",
+      "description": "Precision aerial spray mission and chemical volume tracker",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "missionName": { "type": "string", "maxLength": 120, "description": "Spraying mission identifier" },
+        "farm": { "type": "string", "maxLength": 100, "description": "Target farm" },
+        "crop": { "type": "string", "maxLength": 50, "description": "Target crop" },
+        "sprayType": { "type": "string", "maxLength": 60, "description": "Spray treatment formulation" },
+        "treatment": { "type": "string", "maxLength": 60, "description": "Pathogen or pest targeted" },
+        "applicationRate": { "type": "string", "maxLength": 30, "description": "Dosage per area" },
+        "area": { "type": "number", "description": "Treatment surface area" },
+        "areaUnit": { "type": "string", "maxLength": 20, "description": "Measurement unit" },
+        "estimatedChemical": { "type": "string", "maxLength": 30, "description": "Liters of chemical compound" },
+        "status": { "type": "string", "maxLength": 30, "description": "Scheduled, In-Progress, or Completed" },
+        "date": { "type": "string", "maxLength": 30, "description": "Scheduled execution date" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "missionName", "farm", "status"]
+    },
+    "WeatherData": {
+      "title": "WeatherData",
+      "description": "Meteorological records and flight condition advisories",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "location": { "type": "string", "maxLength": 100, "description": "Farm or weather station location" },
+        "temperature": { "type": "number", "description": "Temperature in Celsius" },
+        "humidity": { "type": "number", "description": "Relative humidity percentage" },
+        "windSpeed": { "type": "number", "description": "Wind speed in km/h" },
+        "condition": { "type": "string", "maxLength": 60, "description": "Weather summary" },
+        "recordedAt": { "type": "string", "maxLength": 50, "description": "Observation timestamp" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "location", "temperature", "condition"]
+    },
+    "AnalyticsReport": {
+      "title": "AnalyticsReport",
+      "description": "Aggregated productivity and operational statistics",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "reportName": { "type": "string", "maxLength": 120, "description": "Analytics report name" },
+        "period": { "type": "string", "maxLength": 50, "description": "Analysis timeframe" },
+        "farmsMonitored": { "type": "number", "description": "Total farms tracked" },
+        "totalArea": { "type": "number", "description": "Total acreage analyzed" },
+        "averageCropHealth": { "type": "number", "description": "Average health score" },
+        "diseaseDetections": { "type": "number", "description": "Count of incidents detected" },
+        "droneMissions": { "type": "number", "description": "Number of flights" },
+        "sprayingMissions": { "type": "number", "description": "Number of spray jobs" },
+        "status": { "type": "string", "maxLength": 30, "description": "Generation state" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "reportName", "status"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Exportable agricultural audit or summary report",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the owner" },
+        "reportName": { "type": "string", "maxLength": 120, "description": "Name of the report" },
+        "reportType": { "type": "string", "maxLength": 60, "description": "Report category" },
+        "farm": { "type": "string", "maxLength": 100, "description": "Related farm" },
+        "crop": { "type": "string", "maxLength": 50, "description": "Crop type" },
+        "area": { "type": "number", "description": "Area covered" },
+        "areaUnit": { "type": "string", "maxLength": 20, "description": "Unit of area" },
+        "cropHealth": { "type": "number", "description": "Assessed crop health" },
+        "diseaseStatus": { "type": "string", "maxLength": 60, "description": "Pathology evaluation" },
+        "monitoringStatus": { "type": "string", "maxLength": 50, "description": "Monitoring status" },
+        "generatedBy": { "type": "string", "maxLength": 100, "description": "User email or identifier" },
+        "status": { "type": "string", "maxLength": 30, "description": "Ready, Draft, or Archived" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "reportName", "reportType", "farm", "status"]
+    },
+    "NotificationAction": {
+      "title": "NotificationAction",
+      "description": "System alerts, mission updates, and user action records",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the recipient" },
+        "action": { "type": "string", "maxLength": 60, "description": "Action performed" },
+        "message": { "type": "string", "maxLength": 300, "description": "Alert message body" },
+        "status": { "type": "string", "maxLength": 30, "description": "Status of the alert" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "message", "status"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Commercial agricultural drone flight booking and quote",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The UID of the customer" },
+        "customerName": { "type": "string", "maxLength": 100, "description": "Full customer name" },
+        "phone": { "type": "string", "maxLength": 30, "description": "Contact telephone number" },
+        "farm": { "type": "string", "maxLength": 100, "description": "Selected farm or estate" },
+        "fieldCategory": { "type": "string", "maxLength": 60, "description": "Field classification" },
+        "area": { "type": "number", "description": "Field surface area" },
+        "unit": { "type": "string", "maxLength": 20, "description": "Kanal or Acre" },
+        "areaInKanal": { "type": "number", "description": "Normalized area in Kanals" },
+        "service": { "type": "string", "maxLength": 100, "description": "Selected drone flight service" },
+        "serviceCode": { "type": "string", "maxLength": 50, "description": "Internal service code" },
+        "ratePerKanal": { "type": "number", "description": "Unit pricing rate" },
+        "totalPrice": { "type": "number", "description": "Total estimated cost in PKR" },
+        "date": { "type": "string", "maxLength": 30, "description": "Preferred service date" },
+        "time": { "type": "string", "maxLength": 20, "description": "Preferred service timeslot" },
+        "notes": { "type": "string", "maxLength": 500, "description": "Field access or crop notes" },
+        "status": { "type": "string", "maxLength": 40, "description": "Pending Confirmation, Confirmed, etc." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["userId", "customerName", "phone", "farm", "service", "totalPrice", "status"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Customer inquiry and mission proposal requests submitted from the public portal",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100, "description": "Full name of the farmer or client" },
+        "email": { "type": "string", "maxLength": 120, "description": "Contact email" },
+        "phone": { "type": "string", "maxLength": 40, "description": "Contact phone number" },
+        "service": { "type": "string", "maxLength": 100, "description": "Service requested" },
+        "organization": { "type": "string", "maxLength": 100, "description": "Farm or company name" },
+        "message": { "type": "string", "maxLength": 1000, "description": "Message details" },
+        "status": { "type": "string", "maxLength": 40, "description": "Status of the lead inquiry" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["name", "email", "phone", "service"]
+    },
+    "Consultation": {
+      "title": "Consultation",
+      "description": "Agri-drone flight consultation and pilot booking",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100, "description": "Full name of the contact" },
+        "email": { "type": "string", "maxLength": 120, "description": "Contact email" },
+        "phone": { "type": "string", "maxLength": 40, "description": "Contact phone number" },
+        "organization": { "type": "string", "maxLength": 100, "description": "Farm or organization name" },
+        "serviceCategory": { "type": "string", "maxLength": 100, "description": "Selected consultation category" },
+        "participantCount": { "type": "number", "description": "Number of participants" },
+        "preferredDate": { "type": "string", "maxLength": 40, "description": "Target date" },
+        "requirements": { "type": "string", "maxLength": 1000, "description": "Specific project requirements" },
+        "status": { "type": "string", "maxLength": 40, "description": "Booking status" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" }
+      },
+      "required": ["name", "email", "phone", "organization"]
+    }
+  },
+  "firestore": {
+    "/farms/{farmId}": {
+      "schema": { "$ref": "#/entities/Farm" },
+      "description": "User agricultural farms and orchards"
+    },
+    "/farmMappings/{mappingId}": {
+      "schema": { "$ref": "#/entities/FarmMapping" },
+      "description": "Digital boundary polygons and mapping runs"
+    },
+    "/cropMonitoring/{scanId}": {
+      "schema": { "$ref": "#/entities/CropMonitoring" },
+      "description": "Crop health scans and vegetative index analytics"
+    },
+    "/diseaseDetections/{detectionId}": {
+      "schema": { "$ref": "#/entities/DiseaseDetection" },
+      "description": "AI pathology scan outcomes and detections"
+    },
+    "/droneMissions/{missionId}": {
+      "schema": { "$ref": "#/entities/DroneMission" },
+      "description": "Active, scheduled, and past drone flight missions"
+    },
+    "/sprayingMissions/{sprayId}": {
+      "schema": { "$ref": "#/entities/SprayingMission" },
+      "description": "Precision chemical and fertilizer application flights"
+    },
+    "/weatherData/{weatherId}": {
+      "schema": { "$ref": "#/entities/WeatherData" },
+      "description": "Weather conditions and operational flight advisories"
+    },
+    "/analyticsReports/{analyticsId}": {
+      "schema": { "$ref": "#/entities/AnalyticsReport" },
+      "description": "Farm performance analytics data"
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/Report" },
+      "description": "Generated management and compliance reports"
+    },
+    "/notificationActions/{actionId}": {
+      "schema": { "$ref": "#/entities/NotificationAction" },
+      "description": "Notification records and user read states"
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/Booking" },
+      "description": "Commercial agricultural drone flight bookings"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/Inquiry" },
+      "description": "Public inquiries and mission requests"
+    },
+    "/consultations/{consultationId}": {
+      "schema": { "$ref": "#/entities/Consultation" },
+      "description": "Consultation and pilot bookings"
+    }
+  }
+}

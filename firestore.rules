@@ -1,0 +1,141 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Connection test document
+    match /test/{docId} {
+      allow get: if true;
+    }
+
+    // Farms collection
+    match /farms/{farmId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(farmId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(farmId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(farmId);
+    }
+
+    // Farm Mappings collection
+    match /farmMappings/{mappingId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(mappingId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(mappingId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(mappingId);
+    }
+
+    // Crop Monitoring collection
+    match /cropMonitoring/{scanId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(scanId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(scanId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(scanId);
+    }
+
+    // Disease Detections collection
+    match /diseaseDetections/{detectionId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(detectionId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(detectionId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(detectionId);
+    }
+
+    // Drone Missions collection
+    match /droneMissions/{missionId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(missionId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(missionId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(missionId);
+    }
+
+    // Spraying Missions collection
+    match /sprayingMissions/{sprayId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(sprayId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(sprayId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(sprayId);
+    }
+
+    // Weather Data collection
+    match /weatherData/{weatherId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(weatherId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(weatherId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(weatherId);
+    }
+
+    // Analytics Reports collection
+    match /analyticsReports/{analyticsId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(analyticsId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(analyticsId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(analyticsId);
+    }
+
+    // Reports collection
+    match /reports/{reportId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(reportId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(reportId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(reportId);
+    }
+
+    // Notification Actions collection
+    match /notificationActions/{actionId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(actionId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(actionId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(actionId);
+    }
+
+    // Bookings collection
+    match /bookings/{bookingId} {
+      allow get: if isOwner(resource.data.userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isOwner(request.resource.data.userId) && isValidId(bookingId);
+      allow update: if isOwner(resource.data.userId) && request.resource.data.userId == resource.data.userId && isValidId(bookingId);
+      allow delete: if isOwner(resource.data.userId) && isValidId(bookingId);
+    }
+
+    // Public Inquiries from landing page
+    match /inquiries/{inquiryId} {
+      allow create: if isValidId(inquiryId);
+      allow get, list: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+
+    // Public Consultations bookings from landing page
+    match /consultations/{consultationId} {
+      allow create: if isValidId(consultationId);
+      allow get, list: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+  }
+}
